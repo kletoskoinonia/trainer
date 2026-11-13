@@ -588,7 +588,7 @@ body{--s:var(--ui,1)}
 .hl-pop{align-items:center;gap:8px!important;padding:8px 10px!important}
 .hl-x,.hl-mk{all:unset;cursor:pointer;min-width:28px;height:28px;display:grid;place-items:center;border-radius:7px;color:var(--ink);font:600 15px Georgia,serif;text-align:center}
 .hl-x{color:var(--muted);font:14px system-ui,sans-serif}.hl-x:hover,.hl-mk:hover{background:var(--surface2)}
-.hl-bar{position:fixed;z-index:95;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:22px;background:var(--surface);border:1px solid var(--line);box-shadow:0 4px 16px rgba(0,0,0,.22)}
+.hl-bar{position:fixed;z-index:95;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:22px;background:var(--surface);border:1.5px solid color-mix(in srgb,var(--accent) 45%,var(--line));box-shadow:0 6px 22px rgba(0,0,0,.3)}
 .hl-bar .hl-mk.on{background:var(--accent-soft);color:var(--accent)}.hl-bar .hl-dot.on{outline:2px solid var(--accent);outline-offset:2px}.hl-bar .hl-clr{color:var(--muted);font:14px system-ui,sans-serif}
 .hl-sep{width:1px;height:18px;background:var(--line)}
 .hl-filter{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0 10px}
@@ -3411,8 +3411,8 @@ function hlBarShow() {
   HL_SEL = t.t; bar.classList.remove("hide"); hlBarState(t.t);
   const touch = matchMedia("(pointer: coarse)").matches, r = t.rect, h = bar.offsetHeight, w = bar.offsetWidth;
   if (touch) {   // on a phone or tablet: docked low on the screen, clear of the selection handles and Android's own menu
-    const tb = document.querySelector(".tabbar"), tbh = tb && tb.offsetParent !== null ? tb.offsetHeight : 0;
-    bar.style.top = (innerHeight - tbh - h - 14) + "px"; bar.style.left = Math.max(8, (innerWidth - w) / 2) + "px"; return;
+    const tb = document.querySelector(".tabbar"), tr = tb && getComputedStyle(tb).display !== "none" ? tb.getBoundingClientRect() : null, tbh = tr && tr.height ? innerHeight - tr.top : 0;
+    bar.style.top = (innerHeight - tbh - h - 28) + "px"; bar.style.left = Math.max(8, (innerWidth - w) / 2) + "px"; return;
   }
   let top = r.top - h - 8; if (top < 8) top = r.bottom + 12; if (top + h > innerHeight - 8) top = Math.max(8, r.top - h - 8);
   bar.style.top = top + "px"; bar.style.left = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, innerWidth - w - 8)) + "px";
