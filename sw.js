@@ -3,7 +3,7 @@
    index.html to see its version (in the <title>), and downloads the whole file only when a
    newer version has been published. The page is then told, so it can offer a restart.
    Developed by Kletos Koinonia. This file rarely needs changing. */
-const CACHE = "trainer-v1";
+const CACHE = "trainer-v1";   // sw 1.1: answers only for the trainer page
 const PAGE = new URL("index.html", self.registration.scope).href;
 const EXTRA = ["manifest.json", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png"].map(p => new URL(p, self.registration.scope).href);
 const META = new URL("__version", self.registration.scope).href;
@@ -47,7 +47,8 @@ self.addEventListener("message", e => { if (e.data === "check-update") e.waitUnt
 self.addEventListener("fetch", e => {
   const req = e.request; if (req.method !== "GET") return;
   const url = new URL(req.url);
-  const isPage = req.mode === "navigate" || url.href === PAGE || url.href === self.registration.scope;
+  // only the trainer itself: other pages on this address (for example privacy.html) load normally
+  const path = url.origin + url.pathname, isPage = path === PAGE || path === self.registration.scope;
   if (isPage && url.origin === self.location.origin && !req.headers.get("range")) {
     e.respondWith((async () => {
       const c = await caches.open(CACHE), hit = await c.match(PAGE);
